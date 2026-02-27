@@ -39,7 +39,7 @@ struct ContentView: View {
                         Button(action: {showingAddUser = true}){
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)
-                                .foregroundColor(.red.opacity(0.7))
+                                .foregroundColor(.red.opacity(0.8))
                         }
                     }
                 }

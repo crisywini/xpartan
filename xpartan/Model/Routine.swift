@@ -17,6 +17,7 @@ final class Routine {
     var totalDuration: TimeInterval
     var date: Date
     var isCompleted: Bool
+    var repetitions: Int
     
     init(name: String) {
         self.name = name
@@ -24,6 +25,7 @@ final class Routine {
         self.totalDuration = 0
         self.date = Date()
         self.isCompleted = false
+        self.repetitions = 0
     }
     
     var estimatedDuration: TimeInterval {
@@ -33,5 +35,9 @@ final class Routine {
     var formattedDuration: String {
         let minutes = Int(totalDuration) / 60
         return "\(minutes) Min"
+    }
+    
+    var  getReps: Int {
+         sets.map{ $0.completedReps }.reduce(0,+)
     }
 }
