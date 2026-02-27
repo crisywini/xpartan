@@ -14,7 +14,7 @@ struct UserDetailView: View {
     
     @Bindable var user: User
     
-     var activeRoutine: Routine? = nil
+    var activeRoutine: Routine? = nil
     
     @State private var showAddRoutine: Bool = false
     
@@ -30,7 +30,7 @@ struct UserDetailView: View {
                 .navigationTitle("Rutinas")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing){
-                        Button { showAddRoutine = true}  label: {
+                        Button { showAddRoutine = true }  label: {
                             Image(systemName: "arrowtriangle.right.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.green.opacity(0.8))
