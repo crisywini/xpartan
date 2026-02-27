@@ -10,7 +10,6 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
 
     var body: some View {
         NavigationStack {
@@ -32,21 +31,6 @@ struct ContentView: View {
             }
         }
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
-        }
-    }
     
 }
 
@@ -63,7 +47,7 @@ struct EmptyUsersView: View {
                 .font(.title2)
                 .bold()
             
-            Text("Tap + to add a new Best")
+            Text("Tap + to add a new Beast")
                 .foregroundColor(.secondary)
         }
         .padding(.top, 200)
@@ -72,5 +56,5 @@ struct EmptyUsersView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: User.self, inMemory: true)
 }
