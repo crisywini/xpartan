@@ -18,7 +18,7 @@ struct RoutineDetailView: View {
         ScrollView {
             
             VStack {
-                let columns = [GridItem(.flexible())]
+                let columns = [GridItem(.flexible()), GridItem(.flexible())]
                 
                 LazyVGrid(columns: columns, spacing: 16){
                     ForEach(excerciseSetsDefault, id: \.self) { es in
@@ -37,36 +37,36 @@ struct RoutineDetailView: View {
     var excerciseSetsDefault: [ExcerciseSet] {
         
         let benchPress = Excercise(name: "Press Plano", muscleGroup: "Pecho")
-        let benchPressSet = ExcerciseSet(excercise: benchPress, setNumber: 1, targetReps: 30, weight: 25)
+        let benchPressSet = ExcerciseSet(excercise: benchPress, setNumber: 1, targetReps: 30, weight: 25.0)
         
         let hammerCurl = Excercise(name: "Martillo", muscleGroup: "Bicep")
-        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl, setNumber: 1, targetReps: 30, weight: 12)
+        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl, setNumber: 1, targetReps: 30, weight: 12.0)
         
         let step = Excercise(name: "Peldaño", muscleGroup: "Pierna")
-        let stepSet = ExcerciseSet(excercise: step, setNumber: 1, targetReps: 30, weight: 25)
+        let stepSet = ExcerciseSet(excercise: step, setNumber: 1, targetReps: 30, weight: 25.0)
         
         let thruster = Excercise(name: "Propulsores", muscleGroup: "Pierna y Hombro")
-        let thrusterSet = ExcerciseSet(excercise: thruster, setNumber: 1, targetReps: 30, weight: 12)
+        let thrusterSet = ExcerciseSet(excercise: thruster, setNumber: 1, targetReps: 30, weight: 12.0)
         
-        let dumbellRow = Excercise(name: "Remo Mancuerna", muscleGroup: "Espalda")
-        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow, setNumber: 1, targetReps: 30, weight: 25)
+        let dumbellRow = Excercise(name: "Remo", muscleGroup: "Espalda")
+        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow, setNumber: 1, targetReps: 30, weight: 25.0)
         
-        let frenchPress = Excercise(name: "Press Francés", muscleGroup: "Tricep")
-        let frenchPressSet = ExcerciseSet(excercise: frenchPress, setNumber: 1, targetReps: 30, weight: 12)
+        let frenchPress = Excercise(name: "Francés", muscleGroup: "Tricep")
+        let frenchPressSet = ExcerciseSet(excercise: frenchPress, setNumber: 1, targetReps: 30, weight: 12.0)
         
         
         let lunges = Excercise(name: "Estocada", muscleGroup: "Pierna")
-        let lungesSet = ExcerciseSet(excercise: lunges, setNumber: 1, targetReps: 30, weight: 25)
+        let lungesSet = ExcerciseSet(excercise: lunges, setNumber: 1, targetReps: 30, weight: 25.0)
         
-        let militaryPress = Excercise(name: "Press Militar", muscleGroup: "Hombro")
-        let militaryPressSet = ExcerciseSet(excercise: militaryPress, setNumber: 1, targetReps: 30, weight: 12)
+        let militaryPress = Excercise(name: "Militar", muscleGroup: "Hombro")
+        let militaryPressSet = ExcerciseSet(excercise: militaryPress, setNumber: 1, targetReps: 30, weight: 12.0)
         
         
         let squat = Excercise(name: "Sentadilla", muscleGroup: "Pierna")
-        let squatSet = ExcerciseSet(excercise: squat, setNumber: 1, targetReps: 30, weight: 25)
+        let squatSet = ExcerciseSet(excercise: squat, setNumber: 1, targetReps: 30, weight: 25.0)
         
-        let farmer = Excercise(name: "Caminata Granjero", muscleGroup: "Antebrazos")
-        let farmerSet = ExcerciseSet(excercise: farmer, setNumber: 1, targetReps: 30, weight: 25)
+        let farmer = Excercise(name: "Caminata", muscleGroup: "Antebrazos")
+        let farmerSet = ExcerciseSet(excercise: farmer, setNumber: 1, targetReps: 30, weight: 25.0)
         
         
         var excerciseSets: [ExcerciseSet] = []
@@ -100,16 +100,16 @@ struct ExcerciseCardView: View {
                     .bold()
                 HStack {
                     Image(systemName:"dumbbell.fill")
-                        .frame(width: 60, alignment: .leading)
+                        .frame(width: .infinity, alignment: .leading)
                         .font(.title2)
                         .bold()
-                    Text(String(format: "%.1f kg", "\(excerciseSet.weight)"))
+                    Text(String(format: "%.f kg", excerciseSet.weight))
                         .font(.title3)
                 }
                 
                 HStack {
                     Image(systemName:"flag.pattern.checkered.circle")
-                        .frame(width: 80, alignment: .leading)
+                        .frame(width: .infinity, alignment: .leading)
                         .font(.title)
                         .bold()
                     
@@ -121,11 +121,12 @@ struct ExcerciseCardView: View {
                 
                 
                 HStack {
-                    Text("Actuales")
-                        .frame(width: 90, alignment: .leading)
+                    Text("Reps")
+                        .frame(width: .infinity, alignment: .leading)
                         .font(.title3)
                         .bold()
-                    TextField("Actuales",  value: $excerciseSet.completedReps, format: .number)
+                    TextField("Reps",  value: $excerciseSet.completedReps, format: .number)
+                        .frame(width: .infinity, alignment: .leading)
                         .font(.title3)
                 }
                 
