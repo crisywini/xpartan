@@ -10,23 +10,31 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    @Query private var users: [User]
+    @State private var showingAddUser = false
 
     var body: some View {
         NavigationStack {
             
             ScrollView {
                 VStack(spacing: 20){
-                    EmptyUsersView()
+                    
+                    if users.isEmpty {
+                        EmptyUsersView()
+                    }
                 }
-                .navigationTitle("Users")
+                .navigationTitle("Bestiax")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing){
-                        Button(action: {true}){
+                        Button(action: {showingAddUser = true}){
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.red.opacity(0.7))
                         }
                     }
+                }
+                .sheet(isPresented: $showingAddUser){
+                    AddUserView()
                 }
             }
         }
@@ -43,11 +51,11 @@ struct EmptyUsersView: View {
                 .foregroundColor(.red.opacity(0.6))
             
             
-            Text("No users yet")
+            Text("Aún no hay usuarios")
                 .font(.title2)
                 .bold()
             
-            Text("Tap + to add a new Beast")
+            Text("Toca + para agregar una bestiax")
                 .foregroundColor(.secondary)
         }
         .padding(.top, 200)

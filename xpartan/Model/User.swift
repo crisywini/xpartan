@@ -21,8 +21,8 @@ final class User {
     var age: Int
     var routines: [Routine]
     
-    init(name: String, height: Double, weight: Double, gender: String, category: String, age: Int) {
-        self.photo = nil
+    init(photo: Data?, name: String, height: Double, weight: Double, gender: String, category: String, age: Int) {
+        self.photo = photo
         self.name = name
         self.height = height
         self.weight = weight
