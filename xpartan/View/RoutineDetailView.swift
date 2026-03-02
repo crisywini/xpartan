@@ -17,13 +17,29 @@ struct RoutineDetailView: View {
         
         ScrollView {
             
-            VStack {
+            VStack(spacing: 30) {
                 let columns = [GridItem(.flexible()), GridItem(.flexible())]
                 
                 LazyVGrid(columns: columns, spacing: 16){
                     ForEach(excerciseSetsDefault, id: \.self) { es in
                         ExcerciseCardView(excerciseSet: es)
+                    }
+                }
+                
+                HStack {
+                    Button {
                         
+                    } label: {
+                        
+                        HStack {
+                            Text("Finish")
+                                .font(.title)
+                                .bold()
+                                .foregroundStyle(.black)
+                            Image(systemName: "flag.pattern.checkered")
+                                .font(.title)
+                                .foregroundStyle(.black)
+                        }
                     }
                 }
             }
@@ -110,9 +126,12 @@ struct ExcerciseCardView: View {
                 
                 
                 HStack{
+                    Image(systemName: "gauge.with.needle")
+                        .foregroundStyle(isRunning ? .green: .secondary)
                     Text(formattedTime)
                         .font(.system(.title3, design: .monospaced))
                         .foregroundStyle(isRunning ? .green : .secondary)
+                    
                 }
                 
                 Text(excerciseSet.excercise.name)
