@@ -91,19 +91,28 @@ struct ExcerciseCardView: View {
     
     @Bindable var excerciseSet: ExcerciseSet
     
+    @State private var isCompleted = false
+    @State private var isRunning = false
+    @State private var elapsedTime: TimeInterval = 0
+    @State private var timer: Timer? = nil
+
+
+    var formattedTime: String {
+        let minutes = Int(elapsedTime) / 60
+        let seconds = Int(elapsedTime) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
+
+    
     var body: some View {
         VStack(spacing: 10) {
             VStack(spacing: 5) {
                 
-                HStack {
-                    Image(systemName: "play.circle")
-                        .font(.title3)
-                        .foregroundColor(Color(.green).opacity(0.6))
-                    
-                    Image(systemName: "stop.circle")
-                        .font(.title3)
-                        .foregroundColor(Color(.red).opacity(0.6))
-                    
+                
+                HStack{
+                    Text(formattedTime)
+                        .font(.system(.title3, design: .monospaced))
+                        .foregroundStyle(isRunning ? .green : .secondary)
                 }
                 
                 Text(excerciseSet.excercise.name)
@@ -139,15 +148,44 @@ struct ExcerciseCardView: View {
                     TextField("Reps",  value: $excerciseSet.completedReps, format: .number)
                         .frame(width: .infinity, alignment: .leading)
                         .font(.title3)
+                    
+                    HStack {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                    isRunning ? stop() : start()
+                            }
+                        
+                        } label: {
+                            Image(systemName: isRunning ? "stop.circle.fill" : "play.circle.fill")
+                                    .font(.title3)
+                                    .foregroundStyle(isRunning ? .red : .green)
+                                    .scaleEffect(isRunning ? 1.4 : 1.3)
+                        }
+                        
+                    }
                 }
                 
 
             }
             .padding(.horizontal, 20)
-            .frame(width: .infinity, height: 150)
+            .frame(width: .infinity, height: 170)
             .background(Color(.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
+    }
+    
+    func start() {
+        isRunning = true
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            elapsedTime += 1
+        }
+    }
+    
+    func stop() {
+        isRunning = false
+        timer?.invalidate()
+        timer = nil
+        excerciseSet.duration = elapsedTime
     }
 }
 
