@@ -95,6 +95,17 @@ struct ExcerciseCardView: View {
         VStack(spacing: 10) {
             VStack(spacing: 5) {
                 
+                HStack {
+                    Image(systemName: "play.circle")
+                        .font(.title3)
+                        .foregroundColor(Color(.green).opacity(0.6))
+                    
+                    Image(systemName: "stop.circle")
+                        .font(.title3)
+                        .foregroundColor(Color(.red).opacity(0.6))
+                    
+                }
+                
                 Text(excerciseSet.excercise.name)
                     .font(.title2)
                     .bold()
