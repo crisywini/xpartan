@@ -11,6 +11,8 @@ import SwiftData
 
 struct RoutineDetailView: View {
     
+    
+    
     var routine: Routine?
     
     var body: some View {
@@ -32,7 +34,7 @@ struct RoutineDetailView: View {
                     } label: {
                         
                         HStack {
-                            Text("Finish")
+                            Text("Finalizar")
                                 .font(.title)
                                 .bold()
                                 .foregroundStyle(.black)
@@ -43,10 +45,10 @@ struct RoutineDetailView: View {
                     }
                 }
             }
-            
+            .navigationTitle("Xpartano")
         }
         .padding(.horizontal)
-        
+
     }
     
     

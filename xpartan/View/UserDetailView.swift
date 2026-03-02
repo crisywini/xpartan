@@ -31,7 +31,7 @@ struct UserDetailView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing){
                         Button { showAddRoutine = true }  label: {
-                            Image(systemName: "arrowtriangle.right.circle.fill")
+                            Image(systemName: "plus.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.green.opacity(0.8))
                         }
