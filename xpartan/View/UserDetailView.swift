@@ -14,7 +14,7 @@ struct UserDetailView: View {
     
     @Bindable var user: User
     
-    var activeRoutine: Routine? = nil
+    @Bindable var activeRoutine: Routine
     
     @State private var showAddRoutine: Bool = false
     
@@ -68,16 +68,10 @@ struct EmptyRoutinesView: View {
     }
 }
 
-#Preview{
-    
-    UserDetailView(user: User(photo: nil,
-                              name: "Cris",
-                              height: 180.0,
-                              weight: 79.0,
-                              gender: "Male",
-                              category: "Wild",
-                              age: 26),
-                   activeRoutine: nil)
-    
-}
-    
+#Preview {
+     UserDetailView(
+         user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26),
+         activeRoutine: Routine(name: "Xpartan")
+     )
+     .modelContainer(for: [User.self, Routine.self, ExcerciseSet.self], inMemory: true)
+ }

@@ -12,8 +12,7 @@ import SwiftData
 struct RoutineDetailView: View {
     
     
-    
-    var routine: Routine?
+    @Bindable var routine: Routine
     
     var body: some View {
         
@@ -211,5 +210,7 @@ struct ExcerciseCardView: View {
 }
 
 #Preview {
-    RoutineDetailView(routine: nil)
+    RoutineDetailView(routine: Routine(name: "Xpartano"))
+        .modelContainer(for: [Routine.self, ExcerciseSet.self], inMemory: true)
+
 }
