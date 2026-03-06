@@ -13,10 +13,10 @@ import SwiftData
 struct UserDetailView: View {
     
     @Bindable var user: User
-    
-    @Bindable var activeRoutine: Routine
-    
+        
     @State private var showAddRoutine: Bool = false
+    
+    @State private var activeRoutine: Routine? = nil
     
     var body: some View {
         NavigationStack {
@@ -30,15 +30,15 @@ struct UserDetailView: View {
                 .navigationTitle("Rutinas")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing){
-                        Button { showAddRoutine = true }  label: {
+                        Button { activeRoutine = Routine(name: "Xpartano") }  label: {
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.green.opacity(0.8))
                         }
                     }
                 }
-                .navigationDestination(isPresented: $showAddRoutine){
-                    RoutineDetailView(routine: activeRoutine)
+                .navigationDestination(item: $activeRoutine){ routine in
+                    RoutineDetailView(routine: routine, user: user)
                 }
             }
         }
@@ -70,8 +70,7 @@ struct EmptyRoutinesView: View {
 
 #Preview {
      UserDetailView(
-         user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26),
-         activeRoutine: Routine(name: "Xpartan")
+         user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26)
      )
      .modelContainer(for: [User.self, Routine.self, ExcerciseSet.self], inMemory: true)
  }

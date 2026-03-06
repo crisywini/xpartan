@@ -16,7 +16,6 @@ final class Routine {
     var sets: [ExcerciseSet]
     var totalDuration: TimeInterval
     var date: Date
-    var isCompleted: Bool
     var repetitions: Int
     
     init(name: String) {
@@ -24,7 +23,6 @@ final class Routine {
         self.sets = []
         self.totalDuration = 0
         self.date = Date()
-        self.isCompleted = false
         self.repetitions = 0
     }
     
@@ -40,4 +38,9 @@ final class Routine {
     var  getReps: Int {
          sets.map{ $0.completedReps }.reduce(0,+)
     }
+    
+    var isCompleted: Bool {
+        return sets.count == 3
+    }
+    
 }

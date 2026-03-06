@@ -11,25 +11,69 @@ import SwiftData
 
 struct RoutineDetailView: View {
     
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
+    
     
     @Bindable var routine: Routine
+    @Bindable var user: User
     
+    @State private var finishCount = 0
+
+    @State private var exerciseSets: [ExcerciseSet] = {
+        let benchPress = Excercise(name: "Press Plano", muscleGroup: "Pecho")
+        let benchPressSet = ExcerciseSet(excercise: benchPress, setNumber: 1, targetReps: 30, weight: 25.0)
+
+        let hammerCurl = Excercise(name: "Martillo", muscleGroup: "Bicep")
+        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl, setNumber: 1, targetReps: 30, weight: 12.0)
+
+        let step = Excercise(name: "Peldaño", muscleGroup: "Pierna")
+        let stepSet = ExcerciseSet(excercise: step, setNumber: 1, targetReps: 30, weight: 25.0)
+
+        let thruster = Excercise(name: "Propulsores", muscleGroup: "Pierna y Hombro")
+        let thrusterSet = ExcerciseSet(excercise: thruster, setNumber: 1, targetReps: 30, weight: 12.0)
+
+        let dumbellRow = Excercise(name: "Remo", muscleGroup: "Espalda")
+        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow, setNumber: 1, targetReps: 30, weight: 25.0)
+
+        let frenchPress = Excercise(name: "Francés", muscleGroup: "Tricep")
+        let frenchPressSet = ExcerciseSet(excercise: frenchPress, setNumber: 1, targetReps: 30, weight: 12.0)
+
+        let lunges = Excercise(name: "Estocada", muscleGroup: "Pierna")
+        let lungesSet = ExcerciseSet(excercise: lunges, setNumber: 1, targetReps: 30, weight: 25.0)
+
+        let militaryPress = Excercise(name: "Militar", muscleGroup: "Hombro")
+        let militaryPressSet = ExcerciseSet(excercise: militaryPress, setNumber: 1, targetReps: 30, weight: 12.0)
+
+        let squat = Excercise(name: "Sentadilla", muscleGroup: "Pierna")
+        let squatSet = ExcerciseSet(excercise: squat, setNumber: 1, targetReps: 30, weight: 25.0)
+
+        let farmer = Excercise(name: "Caminata", muscleGroup: "Antebrazos")
+        let farmerSet = ExcerciseSet(excercise: farmer, setNumber: 1, targetReps: 30, weight: 25.0)
+
+        return [benchPressSet, hammerCurlSet, stepSet, thrusterSet, dumbellRowSet,
+                frenchPressSet, lungesSet, militaryPressSet, squatSet, farmerSet]
+    }()
+
     var body: some View {
-        
+
         ScrollView {
-            
+
             VStack(spacing: 30) {
                 let columns = [GridItem(.flexible()), GridItem(.flexible())]
-                
+
                 LazyVGrid(columns: columns, spacing: 16){
-                    ForEach(excerciseSetsDefault, id: \.self) { es in
-                        ExcerciseCardView(excerciseSet: es)
+                    ForEach(exerciseSets, id: \.self) { es in
+                        ExcerciseCardView(
+                            excerciseSet: es,
+                            resetTrigger: finishCount
+                        )
                     }
                 }
                 
                 HStack {
                     Button {
-                        
+                        finishRoutine()
                     } label: {
                         
                         HStack {
@@ -51,67 +95,34 @@ struct RoutineDetailView: View {
     }
     
     
-    var excerciseSetsDefault: [ExcerciseSet] {
-        
-        let benchPress = Excercise(name: "Press Plano", muscleGroup: "Pecho")
-        let benchPressSet = ExcerciseSet(excercise: benchPress, setNumber: 1, targetReps: 30, weight: 25.0)
-        
-        let hammerCurl = Excercise(name: "Martillo", muscleGroup: "Bicep")
-        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl, setNumber: 1, targetReps: 30, weight: 12.0)
-        
-        let step = Excercise(name: "Peldaño", muscleGroup: "Pierna")
-        let stepSet = ExcerciseSet(excercise: step, setNumber: 1, targetReps: 30, weight: 25.0)
-        
-        let thruster = Excercise(name: "Propulsores", muscleGroup: "Pierna y Hombro")
-        let thrusterSet = ExcerciseSet(excercise: thruster, setNumber: 1, targetReps: 30, weight: 12.0)
-        
-        let dumbellRow = Excercise(name: "Remo", muscleGroup: "Espalda")
-        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow, setNumber: 1, targetReps: 30, weight: 25.0)
-        
-        let frenchPress = Excercise(name: "Francés", muscleGroup: "Tricep")
-        let frenchPressSet = ExcerciseSet(excercise: frenchPress, setNumber: 1, targetReps: 30, weight: 12.0)
-        
-        
-        let lunges = Excercise(name: "Estocada", muscleGroup: "Pierna")
-        let lungesSet = ExcerciseSet(excercise: lunges, setNumber: 1, targetReps: 30, weight: 25.0)
-        
-        let militaryPress = Excercise(name: "Militar", muscleGroup: "Hombro")
-        let militaryPressSet = ExcerciseSet(excercise: militaryPress, setNumber: 1, targetReps: 30, weight: 12.0)
-        
-        
-        let squat = Excercise(name: "Sentadilla", muscleGroup: "Pierna")
-        let squatSet = ExcerciseSet(excercise: squat, setNumber: 1, targetReps: 30, weight: 25.0)
-        
-        let farmer = Excercise(name: "Caminata", muscleGroup: "Antebrazos")
-        let farmerSet = ExcerciseSet(excercise: farmer, setNumber: 1, targetReps: 30, weight: 25.0)
-        
-        
-        var excerciseSets: [ExcerciseSet] = []
-        
-        excerciseSets.append(benchPressSet)
-        excerciseSets.append(hammerCurlSet)
-        excerciseSets.append(stepSet)
-        excerciseSets.append(thrusterSet)
-        excerciseSets.append(dumbellRowSet)
-        excerciseSets.append(frenchPressSet)
-        excerciseSets.append(lungesSet)
-        excerciseSets.append(militaryPressSet)
-        excerciseSets.append(squatSet)
-        excerciseSets.append(farmerSet)
-        
-        return excerciseSets
+    func finishRoutine() {
+
+        if routine.isCompleted {
+            routine.sets = exerciseSets
+            modelContext.insert(routine)
+            user.routines.append(routine)
+            dismiss()
+        }
+
+        routine.repetitions += 1
+        finishCount += 1
     }
     
 }
 
 struct ExcerciseCardView: View {
-    
+
     @Bindable var excerciseSet: ExcerciseSet
-    
+
     @State private var isCompleted = false
     @State private var isRunning = false
     @State private var elapsedTime: TimeInterval = 0
     @State private var timer: Timer? = nil
+
+    @State private var completedReps = 0
+
+    let resetTrigger: Int
+
 
 
     var formattedTime: String {
@@ -153,7 +164,7 @@ struct ExcerciseCardView: View {
                         .font(.title)
                         .bold()
                     
-                    Text("\(excerciseSet.targetReps) Reps")
+                    Text("\(excerciseSet.completedReps) Reps")
                         .font(.title3)
                         .bold()
                 }
@@ -165,9 +176,12 @@ struct ExcerciseCardView: View {
                         .frame(width: .infinity, alignment: .leading)
                         .font(.title3)
                         .bold()
-                    TextField("Reps",  value: $excerciseSet.completedReps, format: .number)
+                        .foregroundStyle(!isRunning ? .secondary : .primary)
+                    TextField("Reps", value: $completedReps, format: .number)
                         .frame(width: .infinity, alignment: .leading)
                         .font(.title3)
+                        .disabled(!isRunning)
+                        .foregroundStyle(!isRunning ? .secondary : .primary)
                     
                     HStack {
                         Button {
@@ -192,25 +206,34 @@ struct ExcerciseCardView: View {
             .background(Color(.systemGray6))
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
+        .onChange(of: resetTrigger) {
+            timer?.invalidate()
+            timer = nil
+            isRunning = false
+            completedReps = 0
+        }
     }
-    
+
     func start() {
         isRunning = true
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             elapsedTime += 1
         }
     }
-    
+
     func stop() {
         isRunning = false
         timer?.invalidate()
         timer = nil
         excerciseSet.duration = elapsedTime
+        excerciseSet.completedReps += completedReps
+        completedReps = 0
     }
 }
 
 #Preview {
-    RoutineDetailView(routine: Routine(name: "Xpartano"))
+    RoutineDetailView(routine: Routine(name: "Xpartano"), user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26)
+    )
         .modelContainer(for: [Routine.self, ExcerciseSet.self], inMemory: true)
 
 }
