@@ -24,28 +24,32 @@ struct ContentView: View {
                     } else {
                         
                         LazyVStack(spacing: 12) {
-                            ForEach(users) { user in NavigationLink(destination: UserDetailView(user: user)) {
+                            ForEach(users) { user in
+                                NavigationLink(value: user) {
                                     UserCardView(user: user)
                                 }
-                            .buttonStyle(.plain)
+                                .buttonStyle(.plain)
                             }
                         }
                         .padding(.horizontal)
                     }
                 }
-                .navigationTitle("Bestiax")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing){
-                        Button(action: {showingAddUser = true}){
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.red.opacity(0.8))
-                        }
+            }
+            .navigationDestination(for: User.self) { user in
+                UserDetailView(user: user)
+            }
+            .navigationTitle("Bestiax")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {showingAddUser = true}){
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.red.opacity(0.8))
                     }
                 }
-                .sheet(isPresented: $showingAddUser){
-                    AddUserView()
-                }
+            }
+            .sheet(isPresented: $showingAddUser){
+                AddUserView()
             }
         }
     }

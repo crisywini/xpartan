@@ -26,24 +26,21 @@ struct UserDetailView: View {
                     EmptyRoutinesView()
                 }
             }
-            .navigationTitle("Rutinas")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing){
-                    Button { activeRoutine = Routine(name: "Xpartano") }  label: {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.green.opacity(0.8))
-                    }
+        }
+        .navigationTitle("Rutinas")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing){
+                Button { activeRoutine = Routine(name: "Xpartano") }  label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.green.opacity(0.8))
                 }
             }
-            .navigationDestination(item: $activeRoutine){ routine in
-                    RoutineDetailView(routine: routine, user: user)
-            }
         }
-        
+        .navigationDestination(item: $activeRoutine){ routine in
+            RoutineDetailView(routine: routine, user: user)
+        }
     }
-    
-    
 }
 
 
