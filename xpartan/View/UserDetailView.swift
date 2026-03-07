@@ -24,6 +24,8 @@ struct UserDetailView: View {
                     
                 if user.routines.isEmpty {
                     EmptyRoutinesView()
+                } else {
+                    
                 }
             }
         }
@@ -38,7 +40,7 @@ struct UserDetailView: View {
             }
         }
         .navigationDestination(item: $activeRoutine){ routine in
-            RoutineDetailView(routine: routine, user: user)
+            ActiveRoutineDetailView(routine: routine, user: user)
         }
     }
 }

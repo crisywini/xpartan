@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-struct RoutineDetailView: View {
+struct ActiveRoutineDetailView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
@@ -273,7 +273,7 @@ struct ExcerciseCardView: View {
 }
 
 #Preview {
-    RoutineDetailView(routine: Routine(name: "Xpartano"), user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26)
+    ActiveRoutineDetailView(routine: Routine(name: "Xpartano"), user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26)
     )
         .modelContainer(for: [Routine.self, ExcerciseSet.self], inMemory: true)
 
