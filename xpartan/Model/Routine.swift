@@ -40,7 +40,7 @@ final class Routine {
     }
     
     var isCompleted: Bool {
-        return sets.count == 3
+        return (repetitions + 1) >= 3
     }
     
 }

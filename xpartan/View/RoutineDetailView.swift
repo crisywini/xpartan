@@ -19,6 +19,9 @@ struct RoutineDetailView: View {
     @Bindable var user: User
     
     @State private var finishCount = 0
+    
+    @State private var routineElapsedTime: TimeInterval = 0
+    @State private var routineTimer: Timer? = nil
 
     @State private var exerciseSets: [ExcerciseSet] = {
         let benchPress = Excercise(name: "Press Plano", muscleGroup: "Pecho")
@@ -60,6 +63,26 @@ struct RoutineDetailView: View {
         ScrollView {
 
             VStack(spacing: 30) {
+                VStack {
+                    Text(
+                        "Serie \(routine.repetitions) • \(routine.date.formatted(date: .abbreviated, time: .omitted))"
+                    )
+                    .font(.title3)
+                    .foregroundStyle(.secondary)
+                    
+                    Divider()
+                                    .frame(height: 24)
+                                
+                                HStack(spacing: 4) {
+                                    Image(systemName: "gauge.with.needle")
+                                        .foregroundStyle(.green)
+                                        .font(.title3)
+                                    Text(formattedRoutineTime)
+                                        .font(.system(.title3, design: .monospaced))
+                                        .foregroundStyle(.green)
+                                }
+                    
+                }
                 let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
                 LazyVGrid(columns: columns, spacing: 16){
@@ -91,6 +114,15 @@ struct RoutineDetailView: View {
             .navigationTitle("Xpartano")
         }
         .padding(.horizontal)
+        .onAppear {
+            routineTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                routineElapsedTime += 1
+            }
+        }
+        .onDisappear {
+            routineTimer?.invalidate()
+            routineTimer = nil
+        }
 
     }
     
@@ -98,14 +130,23 @@ struct RoutineDetailView: View {
     func finishRoutine() {
 
         if routine.isCompleted {
+            routine.totalDuration = routineElapsedTime
+            routineTimer?.invalidate()
             routine.sets = exerciseSets
             modelContext.insert(routine)
             user.routines.append(routine)
             dismiss()
+            return 
         }
 
         routine.repetitions += 1
         finishCount += 1
+    }
+    
+    var formattedRoutineTime: String {
+        let minutes = Int(routineElapsedTime) / 60
+        let seconds = Int(routineElapsedTime) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
     
 }

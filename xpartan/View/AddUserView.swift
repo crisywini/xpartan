@@ -51,7 +51,7 @@ struct AddUserView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Guardar") {
-                        
+                        saveUser()
                     }
                     .disabled(!isFormValid)
                     .bold()

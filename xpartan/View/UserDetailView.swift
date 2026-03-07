@@ -19,29 +19,28 @@ struct UserDetailView: View {
     @State private var activeRoutine: Routine? = nil
     
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 20) {
+        ScrollView {
+            VStack(spacing: 20) {
                     
-                    if user.routines.isEmpty {
-                        EmptyRoutinesView()
-                    }
+                if user.routines.isEmpty {
+                    EmptyRoutinesView()
                 }
-                .navigationTitle("Rutinas")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing){
-                        Button { activeRoutine = Routine(name: "Xpartano") }  label: {
+            }
+            .navigationTitle("Rutinas")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button { activeRoutine = Routine(name: "Xpartano") }  label: {
                             Image(systemName: "plus.circle.fill")
                                 .font(.title2)
                                 .foregroundColor(.green.opacity(0.8))
-                        }
                     }
                 }
-                .navigationDestination(item: $activeRoutine){ routine in
+            }
+            .navigationDestination(item: $activeRoutine){ routine in
                     RoutineDetailView(routine: routine, user: user)
-                }
             }
         }
+        
     }
     
     
