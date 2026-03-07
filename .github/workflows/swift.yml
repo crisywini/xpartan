@@ -17,6 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build
-      run: swift build -v
+      run: xcodebuild build -project xpartan.xcodeproj -scheme xpartan -destination "generic/platform=iOS" CODE_SIGNING_ALLOWED=NO
     # - name: Run tests
-    #   run: swift test -v
+    #   run: xcodebuild test -project xpartan.xcodeproj -scheme xpartan -destination "platform=iOS Simulator,name=iPhone 16" CODE_SIGNING_ALLOWED=NO
