@@ -12,21 +12,11 @@ import SwiftData
 final class ExcerciseSet {
     
     var excercise: Excercise
-    var setNumber: Int
-    var targetReps: Int
-    var completedReps: Int
-    var weight: Double
-    var duration: TimeInterval
-    var isCompleted: Bool
+    var serie: [Serie]
     
     
-    init(excercise: Excercise, setNumber: Int, targetReps: Int, weight: Double) {
+    init(excercise: Excercise) {
         self.excercise = excercise
-        self.setNumber = setNumber
-        self.targetReps = targetReps
-        self.completedReps = 0
-        self.weight = weight
-        self.duration = 0
-        self.isCompleted = false
+        self.serie = []
     }
 }
