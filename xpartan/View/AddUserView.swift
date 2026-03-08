@@ -8,7 +8,6 @@
 import Foundation
 
 import SwiftUI
-import SwiftData
 
 import PhotosUI
 
@@ -18,22 +17,15 @@ struct AddUserView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @State private var name: String = ""
-    @State private var height: String = ""
-    @State private var weight: String = ""
-    @State private var gender: String = ""
-    @State private var category: String = ""
-    @State private var age: String = ""
-    
-    @State private var photoData: Data?
+
     @State private var selectedPhoto: PhotosPickerItem?
     
     @State private var selectedGender: Gender = .male
     @State private var selectedCategory: Category = .wild
     
-    var isFormValid: Bool {
-        return !name.trimmingCharacters(in: .whitespaces).isEmpty && !height.trimmingCharacters(in: .whitespaces).isEmpty && !weight.trimmingCharacters(in: .whitespaces).isEmpty && !age.trimmingCharacters(in: .whitespaces).isEmpty
-    }
+    @State private var vm: AddUserViewModel = AddUserViewModel()
+    
+    
     
     var body: some View {
         NavigationStack {
@@ -41,6 +33,7 @@ struct AddUserView: View {
                 photoSection
                 basicInfoSection
             }
+            
             .navigationTitle("Nuevo Usuario")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -51,17 +44,25 @@ struct AddUserView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Guardar") {
-                        saveUser()
+                        vm.saveUser(selectedGender: selectedGender.rawValue,
+                                     selectedCategory: selectedCategory.rawValue)
                     }
-                    .disabled(!isFormValid)
+                    .disabled(!vm.isFormValid)
                     .bold()
                 }
             }
             .onChange(of: selectedPhoto) { _, newValue in
                 Task {
-                    photoData = try? await newValue?.loadTransferable(type: Data.self)
+                    vm.photoData = try? await newValue?.loadTransferable(type: Data.self)
                 }
-                
+            }
+            .onChange(of: vm.shouldDismiss) {
+                if vm.shouldDismiss {
+                    dismiss()
+                }
+            }
+            .onAppear {
+                vm.setContext(modelContext)
             }
         }
     }
@@ -71,7 +72,7 @@ struct AddUserView: View {
             HStack {
                 Spacer()
                 PhotosPicker(selection: $selectedPhoto, matching: .images) {
-                    if let photoData, let uiImage =  UIImage(data: photoData) {
+                    if let photoData = vm.photoData, let uiImage = UIImage(data: photoData) {
                         Image(uiImage: uiImage)
                             .resizable()
                             .scaledToFit()
@@ -100,12 +101,12 @@ struct AddUserView: View {
     
     private var basicInfoSection: some View{
         Section("Información básica"){
-            TextField("Nombre", text: $name)
-            TextField("Altura", text: $height)
+            TextField("Nombre", text: $vm.name)
+            TextField("Altura", text: $vm.height)
                 .keyboardType(.decimalPad)
-            TextField("Peso", text: $weight)
+            TextField("Peso", text: $vm.weight)
                 .keyboardType(.decimalPad)
-            TextField("Edad", text: $age)
+            TextField("Edad", text: $vm.age)
                 .keyboardType(.numberPad)
             Picker("Genero", selection: $selectedGender){
                 ForEach(Gender.allCases, id: \.self) { gender in
@@ -120,19 +121,7 @@ struct AddUserView: View {
         }
     }
     
-    private func saveUser() {
-        let user = User(
-                        photo: photoData,
-                        name: name,
-                        height: Double(height) ?? 0.0,
-                        weight: Double(weight) ?? 0.0,
-                        gender: selectedGender.rawValue,
-                        category: selectedCategory.rawValue,
-                        age: Int(age) ?? 18,
-                        )
-        modelContext.insert(user)
-        dismiss()
-    }
+    
     
     
 }
