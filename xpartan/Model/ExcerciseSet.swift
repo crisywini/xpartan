@@ -19,4 +19,13 @@ final class ExcerciseSet {
         self.excercise = excercise
         self.serie = []
     }
+
+    var duration: TimeInterval {
+        serie.reduce(0) { $0 + $1.duration }
+    }
+
+    var completedReps: Int {
+        serie.map { $0.completedReps }.reduce(0, +)
+    }
+
 }

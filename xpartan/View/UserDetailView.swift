@@ -12,17 +12,17 @@ import SwiftData
 
 struct UserDetailView: View {
     
-    @Bindable var user: User
-        
-    @State private var showAddRoutine: Bool = false
+    @State private var vm: UserDetailViewModel
     
-    @State private var activeRoutine: Routine? = nil
+    init(user: User) {
+        _vm = State(initialValue: UserDetailViewModel(user: user))
+    }
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
                     
-                if user.routines.isEmpty {
+                if vm.user.routines.isEmpty {
                     EmptyRoutinesView()
                 } else {
                     
@@ -32,15 +32,17 @@ struct UserDetailView: View {
         .navigationTitle("Rutinas")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing){
-                Button { activeRoutine = Routine(name: "Xpartano") }  label: {
+                Button {
+                    vm.createRoutine()
+                }  label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
                             .foregroundColor(.green.opacity(0.8))
                 }
             }
         }
-        .navigationDestination(item: $activeRoutine){ routine in
-            ActiveRoutineDetailView(routine: routine, user: user)
+        .navigationDestination(item: $vm.activeRoutine){ routine in
+            ActiveRoutineDetailView(routine: routine, user: vm.user)
         }
     }
 }
