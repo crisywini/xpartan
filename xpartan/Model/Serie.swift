@@ -25,7 +25,8 @@ final class Serie  {
         self.duration = duration
         self.isCompleted = isCompleted
     }
+    
+    
 
 }
-
 

@@ -27,5 +27,9 @@ final class ExcerciseSet {
     var completedReps: Int {
         serie.map { $0.completedReps }.reduce(0, +)
     }
+    
+    var weight: Double {
+        serie.first?.weight ?? 0.0
+    }
 
 }

@@ -25,34 +25,44 @@ struct ActiveRoutineDetailView: View {
 
     @State private var exerciseSets: [ExcerciseSet] = {
         let benchPress = Excercise(name: "Press Plano", muscleGroup: "Pecho")
-        let benchPressSet = ExcerciseSet(excercise: benchPress, setNumber: 1, targetReps: 30, weight: 25.0)
+        let benchPressSet = ExcerciseSet(excercise: benchPress)
+        benchPressSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
 
         let hammerCurl = Excercise(name: "Martillo", muscleGroup: "Bicep")
-        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl, setNumber: 1, targetReps: 30, weight: 12.0)
+        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl)
+        hammerCurlSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
 
         let step = Excercise(name: "Peldaño", muscleGroup: "Pierna")
-        let stepSet = ExcerciseSet(excercise: step, setNumber: 1, targetReps: 30, weight: 25.0)
+        let stepSet = ExcerciseSet(excercise: step)
+        stepSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
 
         let thruster = Excercise(name: "Propulsores", muscleGroup: "Pierna y Hombro")
-        let thrusterSet = ExcerciseSet(excercise: thruster, setNumber: 1, targetReps: 30, weight: 12.0)
+        let thrusterSet = ExcerciseSet(excercise: thruster)
+        thrusterSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
 
         let dumbellRow = Excercise(name: "Remo", muscleGroup: "Espalda")
-        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow, setNumber: 1, targetReps: 30, weight: 25.0)
+        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow)
+        dumbellRowSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
 
         let frenchPress = Excercise(name: "Francés", muscleGroup: "Tricep")
-        let frenchPressSet = ExcerciseSet(excercise: frenchPress, setNumber: 1, targetReps: 30, weight: 12.0)
+        let frenchPressSet = ExcerciseSet(excercise: frenchPress)
+        frenchPressSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
 
         let lunges = Excercise(name: "Estocada", muscleGroup: "Pierna")
-        let lungesSet = ExcerciseSet(excercise: lunges, setNumber: 1, targetReps: 30, weight: 25.0)
+        let lungesSet = ExcerciseSet(excercise: lunges)
+        lungesSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
 
         let militaryPress = Excercise(name: "Militar", muscleGroup: "Hombro")
-        let militaryPressSet = ExcerciseSet(excercise: militaryPress, setNumber: 1, targetReps: 30, weight: 12.0)
+        let militaryPressSet = ExcerciseSet(excercise: militaryPress)
+        militaryPressSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
 
         let squat = Excercise(name: "Sentadilla", muscleGroup: "Pierna")
-        let squatSet = ExcerciseSet(excercise: squat, setNumber: 1, targetReps: 30, weight: 25.0)
+        let squatSet = ExcerciseSet(excercise: squat)
+        squatSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
 
         let farmer = Excercise(name: "Caminata", muscleGroup: "Antebrazos")
-        let farmerSet = ExcerciseSet(excercise: farmer, setNumber: 1, targetReps: 30, weight: 25.0)
+        let farmerSet = ExcerciseSet(excercise: farmer)
+        farmerSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
 
         return [benchPressSet, hammerCurlSet, stepSet, thrusterSet, dumbellRowSet,
                 frenchPressSet, lungesSet, militaryPressSet, squatSet, farmerSet]
@@ -266,8 +276,19 @@ struct ExcerciseCardView: View {
         isRunning = false
         timer?.invalidate()
         timer = nil
-        excerciseSet.duration = elapsedTime
-        excerciseSet.completedReps += completedReps
+
+        let setNumber = excerciseSet.serie.filter { $0.isCompleted }.count + 1
+        let targetReps = excerciseSet.serie.first?.targetReps ?? 0
+        let weight = excerciseSet.serie.first?.weight ?? 0
+
+        excerciseSet.serie.append(Serie(
+            setNumber: setNumber,
+            targetReps: targetReps,
+            completedReps: completedReps,
+            weight: weight,
+            duration: elapsedTime,
+            isCompleted: true
+        ))
         completedReps = 0
     }
 }
@@ -275,6 +296,6 @@ struct ExcerciseCardView: View {
 #Preview {
     ActiveRoutineDetailView(routine: Routine(name: "Xpartano"), user: User(photo: nil, name: "Cris", height: 180.0, weight: 79.0, gender: "Male", category: "Wild", age: 26)
     )
-        .modelContainer(for: [Routine.self, ExcerciseSet.self], inMemory: true)
+        .modelContainer(for: [Routine.self, ExcerciseSet.self, Serie.self], inMemory: true)
 
 }
