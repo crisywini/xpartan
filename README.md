@@ -1,7 +1,7 @@
 # Xpartan
 
 **Xpartan** is an iOS workout tracking app built with SwiftUI and SwiftData. It lets multiple users log their training sessions, track exercises in real time, and review performance stats — all stored locally on device.
-
+this app is for users, there would be other for administrators.
 ---
 
 ## Features
