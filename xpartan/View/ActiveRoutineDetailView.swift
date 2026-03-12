@@ -14,59 +14,12 @@ struct ActiveRoutineDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    private var vm: ActiveRoutineDetailViewModel
     
-    @Bindable var routine: Routine
-    @Bindable var user: User
+    init(routine: Routine, user: User) {
+        self.vm = ActiveRoutineDetailViewModel(routine: routine, user: user)
+    }
     
-    @State private var finishCount = 0
-    
-    @State private var routineElapsedTime: TimeInterval = 0
-    @State private var routineTimer: Timer? = nil
-
-    @State private var exerciseSets: [ExcerciseSet] = {
-        let benchPress = Excercise(name: "Press Plano", muscleGroup: "Pecho")
-        let benchPressSet = ExcerciseSet(excercise: benchPress)
-        benchPressSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
-
-        let hammerCurl = Excercise(name: "Martillo", muscleGroup: "Bicep")
-        let hammerCurlSet = ExcerciseSet(excercise: hammerCurl)
-        hammerCurlSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
-
-        let step = Excercise(name: "Peldaño", muscleGroup: "Pierna")
-        let stepSet = ExcerciseSet(excercise: step)
-        stepSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
-
-        let thruster = Excercise(name: "Propulsores", muscleGroup: "Pierna y Hombro")
-        let thrusterSet = ExcerciseSet(excercise: thruster)
-        thrusterSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
-
-        let dumbellRow = Excercise(name: "Remo", muscleGroup: "Espalda")
-        let dumbellRowSet = ExcerciseSet(excercise: dumbellRow)
-        dumbellRowSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
-
-        let frenchPress = Excercise(name: "Francés", muscleGroup: "Tricep")
-        let frenchPressSet = ExcerciseSet(excercise: frenchPress)
-        frenchPressSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
-
-        let lunges = Excercise(name: "Estocada", muscleGroup: "Pierna")
-        let lungesSet = ExcerciseSet(excercise: lunges)
-        lungesSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
-
-        let militaryPress = Excercise(name: "Militar", muscleGroup: "Hombro")
-        let militaryPressSet = ExcerciseSet(excercise: militaryPress)
-        militaryPressSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 12.0, duration: 0, isCompleted: false)]
-
-        let squat = Excercise(name: "Sentadilla", muscleGroup: "Pierna")
-        let squatSet = ExcerciseSet(excercise: squat)
-        squatSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
-
-        let farmer = Excercise(name: "Caminata", muscleGroup: "Antebrazos")
-        let farmerSet = ExcerciseSet(excercise: farmer)
-        farmerSet.serie = [Serie(setNumber: 1, targetReps: 30, completedReps: 0, weight: 25.0, duration: 0, isCompleted: false)]
-
-        return [benchPressSet, hammerCurlSet, stepSet, thrusterSet, dumbellRowSet,
-                frenchPressSet, lungesSet, militaryPressSet, squatSet, farmerSet]
-    }()
 
     var body: some View {
 
@@ -75,7 +28,7 @@ struct ActiveRoutineDetailView: View {
             VStack(spacing: 30) {
                 VStack {
                     Text(
-                        "Serie \(routine.repetitions) • \(routine.date.formatted(date: .abbreviated, time: .omitted))"
+                        vm.formattedRoutineInfo
                     )
                     .font(.title3)
                     .foregroundStyle(.secondary)
@@ -87,7 +40,7 @@ struct ActiveRoutineDetailView: View {
                                     Image(systemName: "gauge.with.needle")
                                         .foregroundStyle(.green)
                                         .font(.title3)
-                                    Text(formattedRoutineTime)
+                                    Text(vm.formattedRoutineTime)
                                         .font(.system(.title3, design: .monospaced))
                                         .foregroundStyle(.green)
                                 }
@@ -96,17 +49,17 @@ struct ActiveRoutineDetailView: View {
                 let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
                 LazyVGrid(columns: columns, spacing: 16){
-                    ForEach(exerciseSets, id: \.self) { es in
+                    ForEach(vm.excerciseSets, id: \.self) { es in
                         ExcerciseCardView(
                             excerciseSet: es,
-                            resetTrigger: finishCount
+                            resetTrigger: vm.finishCount
                         )
                     }
                 }
                 
                 HStack {
                     Button {
-                        finishRoutine()
+                        vm.finishRoutine()
                     } label: {
                         
                         HStack {
@@ -125,39 +78,22 @@ struct ActiveRoutineDetailView: View {
         }
         .padding(.horizontal)
         .onAppear {
-            routineTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-                routineElapsedTime += 1
+            vm.setContext(modelContext)
+            
+            vm.routineTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+                vm.routineElapsedTime += 1
             }
         }
         .onDisappear {
-            routineTimer?.invalidate()
-            routineTimer = nil
+            vm.routineTimer?.invalidate()
+            vm.routineTimer = nil
         }
 
     }
     
     
-    func finishRoutine() {
-
-        if routine.isCompleted {
-            routine.totalDuration = routineElapsedTime
-            routineTimer?.invalidate()
-            routine.sets = exerciseSets
-            modelContext.insert(routine)
-            user.routines.append(routine)
-            dismiss()
-            return 
-        }
-
-        routine.repetitions += 1
-        finishCount += 1
-    }
     
-    var formattedRoutineTime: String {
-        let minutes = Int(routineElapsedTime) / 60
-        let seconds = Int(routineElapsedTime) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
+    
     
 }
 
