@@ -12,8 +12,8 @@ struct ExcerciseCardView: View {
 
     @State private var vm: ExcerciseCardViewModel
     
-    init(excerciseSet: ExcerciseSet) {
-        self.vm = ExcerciseCardViewModel(excerciseSet: excerciseSet)
+    init(excerciseSet: ExcerciseSet, resetTrigger: Int) {
+        self.vm = ExcerciseCardViewModel(excerciseSet: excerciseSet, resetTrigger: resetTrigger)
     }
 
     

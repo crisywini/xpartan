@@ -14,7 +14,7 @@ struct ActiveRoutineDetailView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    private var vm: ActiveRoutineDetailViewModel
+    @State private var vm: ActiveRoutineDetailViewModel
     
     init(routine: Routine, user: User) {
         self.vm = ActiveRoutineDetailViewModel(routine: routine, user: user)

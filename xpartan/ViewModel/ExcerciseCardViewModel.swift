@@ -23,11 +23,12 @@ class ExcerciseCardViewModel {
     var isRunning = false
     
     
-    var resetTrigger: Int = 0
+    var resetTrigger: Int
     
     
-    init(excerciseSet: ExcerciseSet) {
+    init(excerciseSet: ExcerciseSet, resetTrigger: Int) {
         self.excerciseSet = excerciseSet
+        self.resetTrigger = resetTrigger
     }
     
     
