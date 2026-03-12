@@ -79,6 +79,7 @@ class ActiveRoutineDetailViewModel {
         self.modelContext = modelContext
     }
     
+    //View Model
     var formattedRoutineInfo: String {
         return "Serie \(routine.repetitions) • \(routine.date.formatted(date: .abbreviated, time: .omitted))"
     }
@@ -104,6 +105,17 @@ class ActiveRoutineDetailViewModel {
 
         routine.repetitions += 1
         finishCount += 1
+    }
+    
+    func startRoutineTimer() {
+        routineTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.routineElapsedTime += 1
+        }
+    }
+    
+    func stopRoutineTimer() {
+        routineTimer?.invalidate()
+        routineTimer = nil
     }
     
     
