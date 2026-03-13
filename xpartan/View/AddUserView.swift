@@ -45,7 +45,8 @@ struct AddUserView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Guardar") {
                         vm.saveUser(selectedGender: selectedGender.rawValue,
-                                     selectedCategory: selectedCategory.rawValue)
+                                    selectedCategory: selectedCategory.rawValue,
+                                    modelContext: modelContext)
                     }
                     .disabled(!vm.isFormValid)
                     .bold()
@@ -60,9 +61,6 @@ struct AddUserView: View {
                 if vm.shouldDismiss {
                     dismiss()
                 }
-            }
-            .onAppear {
-                vm.setContext(modelContext)
             }
         }
     }

@@ -59,7 +59,7 @@ struct ActiveRoutineDetailView: View {
                 
                 HStack {
                     Button {
-                        vm.finishRoutine()
+                        vm.finishRoutine(modelContext)
                     } label: {
                         
                         HStack {
@@ -78,7 +78,6 @@ struct ActiveRoutineDetailView: View {
         }
         .padding(.horizontal)
         .onAppear {
-            vm.setContext(modelContext)
             vm.startRoutineTimer()
         }
         .onDisappear {
